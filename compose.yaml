@@ -1,0 +1,9 @@
+services:
+  openfoam:
+    image: opencfd/openfoam-default:2412
+    working_dir: /home/openfoam/cases
+    volumes:
+      - ./Simulation/OpenFOAM:/home/openfoam/cases
+    stdin_open: true
+    tty: true
+    command: ["/bin/bash"]

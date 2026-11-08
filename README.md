@@ -20,6 +20,7 @@ Destroyer-Engine is dedicated to the conceptual design, CAD modeling, and engine
 - [Engineering Constraints (Destroyer-01 baseline)](#engineering-constraints-destroyer-01-baseline)
 - [Materials & Components](#materials--components)
 - [Calculations & Simulation](#calculations--simulation)
+- [Software Stack](#software-stack)
 - [Wiki Documentation](#wiki-documentation)
 - [Development Status](#development-status)
 - [Engineering Principles](#engineering-principles)
@@ -117,9 +118,13 @@ Destroyer-Engine/
 │   ├── analyse_spec.py
 │   └── test_calculations.py
 ├── Simulation/
+│   └── OpenFOAM/
 ├── Specifications/
 │   ├── Destroyer-01-specification.md
 │   └── destroyer-01.json
+├── Software-Stack.md
+├── compose.yaml
+├── pixi.toml
 ├── diagrams/            # rendered figures (SVG)
 ├── LICENSE
 └── README.md
@@ -238,14 +243,29 @@ See [`Materials/README.md`](Materials/README.md) for selection criteria and stat
 
 - Hand calculations and the Python toolkit live under `Calculations/`.
 - FEA / thermal / CFD studies live under `Simulation/`.
+- The controlled CAD/CAE toolchain is documented in [`Software-Stack.md`](Software-Stack.md).
 - Every result must be tagged as **estimated / calculated / simulated / measured** and reference its assumptions.
 - Run `python3 Calculations/analyse_spec.py` to check the baseline for internal consistency, and `python3 Calculations/test_calculations.py` to run the unit tests.
 
 ---
 
+## Software Stack
+
+The project uses an open-source, macOS-first toolchain that permits commercial use:
+
+- **CAD:** FreeCAD 1.1 (Assembly, TechDraw, FEM), with optional CadQuery/build123d for code-generated parts.
+- **Meshing / FEA:** Gmsh and CalculiX 2.23.
+- **CFD:** OpenFOAM 2412 in a Linux container, with ParaView for post-processing.
+- **1-D engine simulation:** Python + Cantera as the primary transparent model; OpenWAM as an independent cross-check.
+- **Environment:** `pixi.toml` pins the analysis packages; `compose.yaml` runs OpenFOAM.
+
+Installation, licensing, conventions, and rejected alternatives are in [`Software-Stack.md`](Software-Stack.md).
+
+---
+
 ## Development Status
 
-Destroyer-Engine is in the conceptual development stage. The Destroyer-01(A) baseline geometry, performance targets, and constraint register are established as design targets; detailed CAD, 1-D simulation, structural FEA, and dyno validation are pending.
+Destroyer-Engine is in the conceptual development stage. The Destroyer-01(A) baseline geometry, performance targets, and constraint register are established as design targets; the analysis toolchain is defined in [`Software-Stack.md`](Software-Stack.md). Detailed CAD, 1-D simulation, structural FEA, and dyno validation are pending.
 
 Estimated, calculated, simulated, and experimentally measured results are distinguished clearly. The current baseline is a set of targets, not a validated design.
 

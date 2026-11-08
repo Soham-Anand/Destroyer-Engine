@@ -18,6 +18,17 @@ python3 Calculations/analyse_spec.py
 `analyse_spec.py` exits non-zero if a hard consistency check fails. It is the quickest way
 to catch a specification edit that no longer agrees with the geometry or targets.
 
+## Environment
+
+The reproducible analysis environment is defined in [`../pixi.toml`](../pixi.toml), and the
+full CAD/CAE toolchain is in [`../Software-Stack.md`](../Software-Stack.md). With pixi:
+
+```bash
+pixi install
+pixi run test
+pixi run spec
+```
+
 ## Conventions
 
 - SI units unless a name says otherwise (`_mm`, `_cc`, `_bar`, `_rpm`, `_kw` are only used in

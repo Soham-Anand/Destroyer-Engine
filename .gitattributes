@@ -1,0 +1,20 @@
+# Native CAD and geometry exchange files.
+# Git LFS keeps large or binary design data out of normal Git history.
+*.FCStd filter=lfs diff=lfs merge=lfs -text
+*.fcstd filter=lfs diff=lfs merge=lfs -text
+*.FCBak filter=lfs diff=lfs merge=lfs -text
+*.step filter=lfs diff=lfs merge=lfs -text
+*.stp filter=lfs diff=lfs merge=lfs -text
+*.iges filter=lfs diff=lfs merge=lfs -text
+*.igs filter=lfs diff=lfs merge=lfs -text
+*.stl filter=lfs diff=lfs merge=lfs -text
+*.3mf filter=lfs diff=lfs merge=lfs -text
+
+# Rendering and simulation post-processing.
+*.blend filter=lfs diff=lfs merge=lfs -text
+*.vtk filter=lfs diff=lfs merge=lfs -text
+*.vtp filter=lfs diff=lfs merge=lfs -text
+*.vtu filter=lfs diff=lfs merge=lfs -text
+*.pvtu filter=lfs diff=lfs merge=lfs -text
+*.case filter=lfs diff=lfs merge=lfs -text
+*.ensight filter=lfs diff=lfs merge=lfs -text

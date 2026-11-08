@@ -8,6 +8,7 @@ __pycache__/
 *.py[cod]
 .venv/
 venv/
+.pixi/
 
 # CAD application backups and temporary files
 *.blend1
@@ -17,4 +18,8 @@ venv/
 # Simulation scratch output (keep inputs and reports under version control)
 Simulation/**/output/
 Simulation/**/results/
+Simulation/OpenFOAM/**/processor*/
+Simulation/OpenFOAM/**/postProcessing/
+Simulation/OpenFOAM/**/VTK/
+Simulation/OpenFOAM/**/dynamicCode/
 *.log
