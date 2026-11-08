@@ -1,8 +1,8 @@
-# S2-Engine
+# Destroyer-Engine
 
 **An independent engine design and engineering project.**
 
-S2-Engine is dedicated to the conceptual design, CAD modeling, and engineering analysis of an internal combustion engine. The project focuses on mechanical architecture, component systems, performance constraints, thermal management, and detailed 3D assemblies.
+Destroyer-Engine is dedicated to the conceptual design, CAD modeling, and engineering analysis of an internal combustion engine. The project focuses on mechanical architecture, component systems, performance constraints, thermal management, and detailed 3D assemblies.
 
 > Status: **conceptual development stage.** Specifications, CAD models, and performance targets are documented as they are established. Estimated, calculated, simulated, and experimentally measured results are always distinguished.
 
@@ -13,11 +13,11 @@ S2-Engine is dedicated to the conceptual design, CAD modeling, and engineering a
 - [Engineering Overview](#engineering-overview)
 - [Project Objectives](#project-objectives)
 - [Engine Family](#engine-family)
-- [Planned Repository Structure](#planned-repository-structure)
+- [Repository Structure](#repository-structure)
 - [Development Workflow](#development-workflow)
 - [Thermal Management](#thermal-management)
 - [CAD Pipeline](#cad-pipeline)
-- [Engineering Constraints (initial targets)](#engineering-constraints-initial-targets)
+- [Engineering Constraints (Destroyer-01 baseline)](#engineering-constraints-destroyer-01-baseline)
 - [Materials & Components](#materials--components)
 - [Calculations & Simulation](#calculations--simulation)
 - [Wiki Documentation](#wiki-documentation)
@@ -36,10 +36,10 @@ S2-Engine is dedicated to the conceptual design, CAD modeling, and engineering a
 
 ```mermaid
 flowchart TD
-    S2["S2-Engine"] --> ARCH["Architecture"]
-    S2 --> MECH["Mechanical Systems"]
-    S2 --> CAD["CAD Models"]
-    S2 --> ANALYSIS["Engineering Analysis"]
+    DE["Destroyer-Engine"] --> ARCH["Architecture"]
+    DE --> MECH["Mechanical Systems"]
+    DE --> CAD["CAD Models"]
+    DE --> ANALYSIS["Engineering Analysis"]
     ARCH --> LAYOUT["Engine Layout"]
     ARCH --> INTERFACES["System Interfaces"]
     MECH --> PISTON["Piston / Conrod"]
@@ -80,27 +80,29 @@ The engine is decomposed into four top-level domains — **Architecture**, **Mec
 
 ```mermaid
 flowchart TD
-    FAM["S2 Engine Family"] --> S201["S2-01: Ethanol"]
-    S201 --> TURBO["S2-01(T): Turbocharged"]
-    S201 --> NA["S2-01(A): Naturally Aspirated"]
-    FAM --> S202["S2-02: Petrol (reserved)"]
+    FAM["Destroyer Engine Family"] --> D201["Destroyer-01: Ethanol"]
+    D201 --> TURBO["Destroyer-01(T): Turbocharged"]
+    D201 --> NA["Destroyer-01(A): Naturally Aspirated"]
+    FAM --> D202["Destroyer-02: Petrol (reserved)"]
 ```
 
 </details>
 
-- **S2-01** — ethanol-fueled internal combustion engine concept. Initial focus of the project.
-  - **S2-01(T)** — turbocharged variant (planned; feasibility TBD).
-  - **S2-01(A)** — naturally aspirated variant (planned; feasibility TBD).
-- **S2-02** — petrol-fueled concept, reserved for potential future development.
+- **Destroyer-01** — ethanol-fueled internal combustion engine concept. Initial focus of the project.
+  - **Destroyer-01(T)** — turbocharged variant (planned; feasibility TBD).
+  - **Destroyer-01(A)** — naturally aspirated variant; current baseline.
+- **Destroyer-02** — petrol-fueled concept, reserved for potential future development.
 
-Turbocharged and naturally aspirated configurations are planned variants whose specifications and feasibility remain to be evaluated.
+The turbocharged variant remains planned; its specification and feasibility are still to be evaluated.
+
+The naturally aspirated Destroyer-01(A) baseline is now defined: 1998 cc inline-4, 86.0 × 86.0 mm bore/stroke, 12.5:1 compression ratio, 150 kW / 215 N·m design targets, 7500 rpm redline, and E100 port injection. See the [Destroyer-01 specification](Specifications/Destroyer-01-specification.md). These are conceptual targets, not validated results.
 
 ---
 
-## Planned Repository Structure
+## Repository Structure
 
 ```text
-S2-Engine/
+Destroyer-Engine/
 ├── CAD/
 │   ├── Components/
 │   ├── Assemblies/
@@ -108,10 +110,16 @@ S2-Engine/
 ├── Architecture/
 ├── Mechanical-Systems/
 ├── Engineering-Constraints/
+│   └── constraints.md
 ├── Materials/
 ├── Calculations/
+│   ├── calculations.py
+│   ├── analyse_spec.py
+│   └── test_calculations.py
 ├── Simulation/
 ├── Specifications/
+│   ├── Destroyer-01-specification.md
+│   └── destroyer-01.json
 ├── diagrams/            # rendered figures (SVG)
 ├── LICENSE
 └── README.md
@@ -166,7 +174,7 @@ flowchart TD
 
 </details>
 
-Cooling paths are split by heat source: coolant loop → radiator → fan → ambient; oil → oil cooler; intake air → intercooler (turbo variant only). Heat-rejection targets and coolant flow rates are to be established during the constraints phase.
+Cooling paths are split by heat source: coolant loop → radiator → fan → ambient; oil → oil cooler; intake air → intercooler (turbo variant only). First-order heat-rejection targets and coolant/oil flow rates are recorded in the Destroyer-01 specification; they remain to be validated by thermal simulation and testing.
 
 ---
 
@@ -193,48 +201,53 @@ All parts are modeled parametrically so dimensions can be driven by the engineer
 
 ---
 
-## Engineering Constraints (initial targets)
+## Engineering Constraints (Destroyer-01 baseline)
 
-Values below are **placeholders / to-be-defined**. They will be replaced with calculated or simulated values as the design matures.
+Values below are **design targets** for Destroyer-01(A). They are not yet validated by simulation or testing. The full constraint register is in [`Engineering-Constraints/constraints.md`](Engineering-Constraints/constraints.md); the numeric baseline is in [`Specifications/destroyer-01.json`](Specifications/destroyer-01.json).
 
 | Parameter | Target | Status |
 |---|---|---|
-| Fuel | Ethanol (E100) | defined |
-| Displacement | TBD | TBD |
-| Bore × Stroke | TBD | TBD |
-| Compression ratio | TBD | TBD |
-| Max power | TBD | TBD |
-| Max torque | TBD | TBD |
-| Redline | TBD | TBD |
-| Cooling | Liquid-cooled | defined |
-| Aspiration | Turbocharged / NA | planned variants |
+| Fuel | Ethanol (E100), RON ≥ 108 | defined |
+| Layout | Inline-4, DOHC 16-valve, NA | defined |
+| Displacement | 1998 cc | design target |
+| Bore × Stroke | 86.0 × 86.0 mm | design target |
+| Compression ratio | 12.5:1 | design target |
+| Max power | 150 kW @ 7000 rpm | design target |
+| Max torque | 215 N·m @ 4800 rpm | design target |
+| Redline | 7500 rpm | design target |
+| Cooling | Liquid-cooled, 90 °C outlet target | defined |
+| Aspiration | NA baseline; turbo variant planned | planned variant |
 
 ---
 
 ## Materials & Components
 
-Material choices and component specifications will be documented per part under `Materials/` and `Specifications/`. Initial considerations:
+Material choices and component specifications are documented per part under `Materials/` and `Specifications/`. The preliminary Destroyer-01 baseline is:
 
-- **Block / head:** cast aluminum or cast iron (trade-off: mass vs. thermal conductivity and cost).
-- **Crankshaft:** forged steel.
-- **Pistons:** forged aluminum with steel ring carriers.
-- **Gaskets / seals:** ethanol-compatible elastomers.
+- **Block / head:** A356-T6 aluminium (provisional), with pressed-in iron liners in the block.
+- **Crankshaft / rods:** forged 4340 steel.
+- **Pistons:** forged 2618-T61 aluminium.
+- **Valves:** 21-4N intake, Inconel 751 exhaust (provisional).
+- **Gaskets / seals:** MLS head gasket, FKM / PTFE ethanol-compatible seals.
+
+See [`Materials/README.md`](Materials/README.md) for selection criteria and status.
 
 ---
 
 ## Calculations & Simulation
 
-- Hand calculations and spreadsheets live under `Calculations/`.
+- Hand calculations and the Python toolkit live under `Calculations/`.
 - FEA / thermal / CFD studies live under `Simulation/`.
 - Every result must be tagged as **estimated / calculated / simulated / measured** and reference its assumptions.
+- Run `python3 Calculations/analyse_spec.py` to check the baseline for internal consistency, and `python3 Calculations/test_calculations.py` to run the unit tests.
 
 ---
 
 ## Development Status
 
-S2-Engine is in the conceptual development stage. Engine specifications, CAD models, component designs, and performance targets will be documented as they are established.
+Destroyer-Engine is in the conceptual development stage. The Destroyer-01(A) baseline geometry, performance targets, and constraint register are established as design targets; detailed CAD, 1-D simulation, structural FEA, and dyno validation are pending.
 
-Estimated, calculated, simulated, and experimentally measured results will be distinguished clearly.
+Estimated, calculated, simulated, and experimentally measured results are distinguished clearly. The current baseline is a set of targets, not a validated design.
 
 ---
 
@@ -250,12 +263,11 @@ Estimated, calculated, simulated, and experimentally measured results will be di
 
 ## Wiki Documentation
 
-All learning and project documentation lives on the **GitHub Wiki** (not in this repository):
+Background and learning material lives on the **GitHub Wiki**:
 - **Learning Base** — fundamentals, thermodynamics, calculations, materials, thermal, CAD, references.
-- **Project Base** — specifications, constraints, architecture, mechanical systems, materials, CAD pipeline, calculations, simulation plan.
+- **Project Base** — project notes and design discussion.
 
-The repository stays focused on CAD models, calculations, and code. See the wiki for
-documentation.
+The repository keeps the controlled specifications, constraints, calculations, CAD models, and code. The wiki is for supporting material, not the controlled baseline.
 
 ## License
 

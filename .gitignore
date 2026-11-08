@@ -1,0 +1,20 @@
+# macOS / editors
+.DS_Store
+*.swp
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# CAD application backups and temporary files
+*.blend1
+*.FCStd1
+*.fcztmp
+
+# Simulation scratch output (keep inputs and reports under version control)
+Simulation/**/output/
+Simulation/**/results/
+*.log

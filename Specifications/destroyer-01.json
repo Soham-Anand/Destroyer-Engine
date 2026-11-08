@@ -1,0 +1,130 @@
+{
+  "schema_version": "0.1.0",
+  "engine": "Destroyer-01",
+  "status": "conceptual design target",
+  "architecture": {
+    "layout": "inline-4",
+    "valvetrain": "DOHC, 4 valves per cylinder, bucket tappets",
+    "aspiration": "naturally aspirated",
+    "fuel_system": "port fuel injection (PFI)",
+    "cooling": "liquid-cooled, pressurised",
+    "firing_order": [1, 3, 4, 2],
+    "cylinder_numbering": "1 at front, front-to-rear 1-2-3-4 (provisional)",
+    "cam_phasing": "variable intake cam timing (provisional)",
+    "ignition": "coil-on-plug"
+  },
+  "geometry": {
+    "bore_m": 0.086,
+    "stroke_m": 0.086,
+    "cylinder_count": 4,
+    "compression_ratio": 12.5,
+    "rod_length_m": 0.143,
+    "cylinder_spacing_m": 0.096,
+    "declared_displacement_cc": 1998.2
+  },
+  "performance": {
+    "peak_power_w": 150000,
+    "peak_power_rpm": 7000,
+    "peak_torque_nm": 215.0,
+    "peak_torque_rpm": 4800,
+    "redline_rpm": 7500,
+    "fuel_cut_rpm": 7600,
+    "idle_rpm": 850
+  },
+  "fuel": {
+    "name": "E100 ethanol",
+    "stoich_afr_mass": 9.0,
+    "lambda_wot": 0.85,
+    "lhv_j_per_kg": 26800000,
+    "density_kg_per_m3": 789,
+    "ron": 108,
+    "mon": 89,
+    "latent_heat_vaporization_kj_per_kg": 840,
+    "injection_pressure_bar": 4.0,
+    "injector_count": 4,
+    "injector_duty_cycle_max": 0.80
+  },
+  "reference_conditions": {
+    "air_temp_c": 25,
+    "air_pressure_kpa": 101.325,
+    "air_density_kg_per_m3": 1.184
+  },
+  "targets": {
+    "peak_torque_bmep_bar": 13.5,
+    "peak_power_bmep_bar": 12.9,
+    "specific_power_kw_per_l": 75.1,
+    "best_bsfc_g_per_kwh": 410,
+    "peak_power_bsfc_g_per_kwh": 435,
+    "max_mean_piston_speed_m_per_s": 22.0,
+    "peak_cylinder_pressure_limit_bar": 100,
+    "rod_compressive_limit_kn": 120,
+    "rod_tensile_limit_kn": 35,
+    "injector_static_flow_target_cc_min": 500,
+    "min_intake_port_velocity_m_per_s": 70,
+    "max_intake_port_velocity_m_per_s": 110,
+    "min_intake_curtain_velocity_m_per_s": 55,
+    "max_intake_curtain_velocity_m_per_s": 75,
+    "min_volumetric_efficiency": 0.90,
+    "max_volumetric_efficiency": 1.10,
+    "min_lift_to_diameter_ratio": 0.25,
+    "max_lift_to_diameter_ratio": 0.40,
+    "coolant_heat_rejection_target_kw": 135,
+    "dry_mass_target_kg": 160,
+    "length_target_m": 0.65,
+    "width_target_m": 0.60,
+    "height_target_m": 0.70
+  },
+  "thermal": {
+    "coolant": "50/50 ethylene glycol/water",
+    "coolant_outlet_target_c": 90,
+    "coolant_max_continuous_c": 105,
+    "coolant_delta_t_k": 10,
+    "coolant_cp_j_per_kgk": 3500,
+    "coolant_density_kg_per_m3": 1060,
+    "oil_target_c": 110,
+    "oil_max_continuous_c": 130,
+    "oil_delta_t_k": 20,
+    "oil_cp_j_per_kgk": 2000,
+    "oil_density_kg_per_m3": 850,
+    "coolant_share_of_rejected_heat": 0.40,
+    "oil_share_of_rejected_heat": 0.10,
+    "exhaust_share_of_rejected_heat": 0.46,
+    "radiation_share_of_rejected_heat": 0.04
+  },
+  "mechanical": {
+    "reciprocating_mass_kg": 0.60,
+    "piston_assembly_mass_kg": 0.45
+  },
+  "valvetrain": {
+    "intake_valve_diameter_m": 0.0355,
+    "exhaust_valve_diameter_m": 0.0305,
+    "intake_valve_lift_m": 0.0115,
+    "exhaust_valve_lift_m": 0.0105,
+    "intake_duration_deg": 260,
+    "exhaust_duration_deg": 256,
+    "intake_open_deg_btdc": 16,
+    "intake_close_deg_abdc": 64,
+    "exhaust_open_deg_bbdc": 56,
+    "exhaust_close_deg_atdc": 20,
+    "intake_port_diameter_m": 0.033,
+    "exhaust_port_diameter_m": 0.028
+  },
+  "materials": {
+    "block": "A356-T6 aluminium with pressed-in iron liners (provisional)",
+    "cylinder_head": "A356-T6 aluminium (provisional)",
+    "crankshaft": "forged 4340 steel",
+    "connecting_rods": "forged 4340 steel",
+    "pistons": "forged 2618-T61 aluminium",
+    "intake_valves": "21-4N stainless steel",
+    "exhaust_valves": "Inconel 751 (provisional)",
+    "head_gasket": "multi-layer steel (MLS)",
+    "seals": "FKM / PTFE, ethanol-compatible"
+  },
+  "operating_envelope": {
+    "ambient_temp_min_c": -10,
+    "ambient_temp_max_c": 45,
+    "altitude_max_m": 2000,
+    "design_life_km": 100000,
+    "design_life_hours": 2000
+  }
+}
