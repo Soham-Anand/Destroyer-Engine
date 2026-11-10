@@ -18,12 +18,12 @@ This study asks a single question: **can the Destroyer-01(A) baseline geometry a
 150 kW at 7000 rpm and 215 N·m at 4800 rpm?** The recorded fallback is 140 kW and 205 N·m at
 the same speeds (C-006/C-007).
 
-Short answer: **the baseline meets the fallback targets, but not the stretch targets at their
-specified speeds.** It predicts 211.1 N·m at 4800 rpm and 144.0 kW at 7000 rpm. The model's
-torque peak is at 3500 rpm, not 4800 rpm, and its power peak is at 7500 rpm, not 7000 rpm. That
-shape is a direct consequence of the model having no intake or exhaust wave dynamics: it cannot
-produce the resonant torque hump that a tuned naturally aspirated engine uses to hold torque at
-4800 rpm.
+Short answer: **the baseline meets the fallback targets in the model, but not the stretch
+targets at their specified speeds.** It predicts 211.1 N·m at 4800 rpm and 144.0 kW at 7000 rpm.
+The model's torque peak is at 3500 rpm, not 4800 rpm, and its power peak is at 7500 rpm, not
+7000 rpm. That shape is a direct consequence of the model having no intake or exhaust wave
+dynamics: it cannot produce the resonant torque hump that a tuned naturally aspirated engine uses
+to hold torque at 4800 rpm.
 
 A modest pressure recovery at the intake (+5 kPa, 106.325 kPa absolute) or stronger charge
 cooling (effectiveness 0.50 instead of 0.35) is enough to clear both stretch targets in the
@@ -178,6 +178,9 @@ is not met at the specified speed.
 The model therefore supports the **fallback** performance claim, not the stretch claim. The
 distinction matters: 211.1 N·m is within 2 % of 215 N·m, but the target also specifies 4800 rpm,
 and the model puts the peak at 3500 rpm.
+
+Both fallback margins are only about 3 %, smaller than the ±5–10 % uncertainty expected of a
+first-order model. The fallback result is a consistency check, not a guarantee.
 
 ---
 
