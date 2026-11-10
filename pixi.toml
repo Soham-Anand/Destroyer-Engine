@@ -16,11 +16,13 @@ cantera = "3.2.*"
 calculix = "2.23.*"
 
 [tasks]
-test = { depends-on = ["test-calculations", "test-cycle"] }
+test = { depends-on = ["test-calculations", "test-cycle", "test-sound"] }
 test-calculations = "python Calculations/test_calculations.py"
 test-cycle = "python Simulation/Cycle-Simulation/test_cycle_model.py"
+test-sound = "python Simulation/Acoustics/test_engine_sound.py"
 spec = "python Calculations/analyse_spec.py"
 sweep = "python Simulation/Cycle-Simulation/run_sweep.py"
 sweep-tuned = "python Simulation/Cycle-Simulation/run_sweep.py --intake-pressure-kpa 106.325 --output Simulation/Cycle-Simulation/sweep-tuned-intake.csv"
 sweep-cooling = "python Simulation/Cycle-Simulation/run_sweep.py --charge-cooling 0.50 --output Simulation/Cycle-Simulation/sweep-charge-cooling.csv"
+sound = "python Simulation/Acoustics/engine_sound.py --rpm 4800 --duration 4.0 --plot"
 lab = "jupyter lab"

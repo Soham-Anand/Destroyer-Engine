@@ -740,7 +740,15 @@ class CycleModel:
         work_closed = 0.0
         work_gas_exchange = 0.0
         peak_pressure = 0.0
-        trace = {"phi": [], "pressure": [], "temperature": [], "volume": [], "burned": []}
+        trace = {
+            "phi": [],
+            "pressure": [],
+            "temperature": [],
+            "volume": [],
+            "burned": [],
+            "mdot_out": [],
+            "mdot_in": [],
+        }
 
         while phi < 720.0 - 1e-9:
             step = min(d_phi, 720.0 - phi)
@@ -771,6 +779,8 @@ class CycleModel:
                 trace["temperature"].append(state.temperature)
                 trace["volume"].append(diagnostics["volume"])
                 trace["burned"].append(diagnostics["burned_fraction"])
+                trace["mdot_out"].append(diagnostics["mdot_out"])
+                trace["mdot_in"].append(diagnostics["mdot_in"])
             phi += step
 
         if state.temperature < 200.0 or state.mass <= 0.0:

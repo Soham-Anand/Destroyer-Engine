@@ -118,6 +118,8 @@ Destroyer-Engine/
 │   ├── analyse_spec.py
 │   └── test_calculations.py
 ├── Simulation/
+│   ├── Acoustics/
+│   ├── Cycle-Simulation/
 │   └── OpenFOAM/
 ├── Specifications/
 │   ├── Destroyer-01-specification.md
@@ -244,9 +246,10 @@ See [`Materials/README.md`](Materials/README.md) for selection criteria and stat
 - Hand calculations and the Python toolkit live under `Calculations/`.
 - FEA / thermal / CFD studies live under `Simulation/`.
 - The first cycle study — a crank-angle filling-and-emptying model of Destroyer-01(A) — is in [`Simulation/Cycle-Simulation/`](Simulation/Cycle-Simulation/README.md).
+- A qualitative engine-sound sketch built from that cycle trace is in [`Simulation/Acoustics/`](Simulation/Acoustics/README.md).
 - The controlled CAD/CAE toolchain is documented in [`Software-Stack.md`](Software-Stack.md).
 - Every result must be tagged as **estimated / calculated / simulated / measured** and reference its assumptions.
-- Run `pixi run test` for all unit tests, `pixi run spec` to check the baseline for internal consistency, and `pixi run sweep` to regenerate the cycle-simulation results.
+- Run `pixi run test` for all unit tests, `pixi run spec` to check the baseline for internal consistency, `pixi run sweep` to regenerate the cycle-simulation results, and `pixi run sound` to render the 4800 rpm sound sketch.
 
 ---
 
@@ -268,7 +271,11 @@ Installation, licensing, conventions, and rejected alternatives are in [`Softwar
 
 Destroyer-Engine is in the conceptual development stage. The Destroyer-01(A) baseline geometry, performance targets, and constraint register are established as design targets; the analysis toolchain is installed and verified, and documented in [`Software-Stack.md`](Software-Stack.md).
 
-The first analysis pass is complete: a crank-angle filling-and-emptying cycle model predicts 211.1 N·m at 4800 rpm and 144.0 kW at 7000 rpm `[simulated]`, meeting the recorded fallback targets but not the 215 N·m / 150 kW stretch targets at those speeds. See [`Simulation/Cycle-Simulation/`](Simulation/Cycle-Simulation/README.md) for the assumptions, sensitivity band, and limitations. Wave-action 1-D simulation, detailed CAD, structural FEA, and dyno validation are pending.
+The first analysis pass is complete: a crank-angle filling-and-emptying cycle model predicts 211.1 N·m at 4800 rpm and 144.0 kW at 7000 rpm `[simulated]`, meeting the recorded fallback targets but not the 215 N·m / 150 kW stretch targets at those speeds. See [`Simulation/Cycle-Simulation/`](Simulation/Cycle-Simulation/README.md) for the assumptions, sensitivity band, and limitations.
+
+A qualitative sound sketch now uses the cycle model's valve mass flows to synthesize a 1-3-4-2 exhaust note at 4800 and 7000 rpm `[simulated]`. Its strongest low-order component is the 2nd engine order, as expected for a four-stroke inline-four. It is not a validated acoustic prediction — no exhaust geometry, radiation model, or microphone calibration exists yet. See [`Simulation/Acoustics/`](Simulation/Acoustics/README.md).
+
+Wave-action 1-D simulation, detailed CAD, structural FEA, and dyno validation are pending.
 
 Estimated, calculated, simulated, and experimentally measured results are distinguished clearly. The current baseline is a set of targets, not a validated design.
 
