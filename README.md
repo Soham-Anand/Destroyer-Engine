@@ -208,7 +208,7 @@ All parts are modeled parametrically so dimensions can be driven by the engineer
 
 ## Engineering Constraints (Destroyer-01 baseline)
 
-Values below are **design targets** for Destroyer-01(A). A first-pass cycle simulation supports the recorded fallback performance (205 N·m at 4800 rpm and 140 kW at 7000 rpm) but not the 215 N·m / 150 kW stretch targets at those speeds; see [`Simulation/Cycle-Simulation/`](Simulation/Cycle-Simulation/README.md). They are not yet validated by testing. The full constraint register is in [`Engineering-Constraints/constraints.md`](Engineering-Constraints/constraints.md); the numeric baseline is in [`Specifications/destroyer-01.json`](Specifications/destroyer-01.json).
+Values below are **design targets** for Destroyer-01(A). A first-pass cycle simulation `[simulated]` supports the recorded fallback performance (205 N·m at 4800 rpm and 140 kW at 7000 rpm) but not the 215 N·m / 150 kW stretch targets at those speeds; see [`Simulation/Cycle-Simulation/`](Simulation/Cycle-Simulation/README.md). They are not yet validated by testing. The full constraint register is in [`Engineering-Constraints/constraints.md`](Engineering-Constraints/constraints.md); the numeric baseline is in [`Specifications/destroyer-01.json`](Specifications/destroyer-01.json).
 
 | Parameter | Target | Status |
 |---|---|---|
