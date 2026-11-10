@@ -37,8 +37,8 @@ SAMPLE_RATE = 48_000
 DEFAULT_DURATION_S = 4.0
 FIRING_ORDER = (1, 3, 4, 2)
 FIRING_ANGLES_DEG = (0.0, 180.0, 360.0, 540.0)
-CYLINDER_GAINS = (1.00, 0.93, 1.04, 0.97)
-CYLINDER_DELAYS_S = (0.0, 0.00012, -0.00008, 0.00018)
+CYLINDER_GAINS = (1.00, 0.99, 1.01, 0.995)
+CYLINDER_DELAYS_S = (0.0, 0.00005, -0.00003, 0.00007)
 
 
 def load_trace(
@@ -246,59 +246,49 @@ def intake_transfer(values: np.ndarray, sample_rate: int) -> np.ndarray:
 
 def duct_impulse_response(
     sample_rate: int,
-    length_m: float = 1.5,
+    length_m: float = 1.2,
     area_m2: float = 0.0028,
     c_m_s: float = 550.0,
     rho_kg_m3: float = 0.6,
     damping: float = 0.0015,
     duration_s: float = 0.12,
+    n_modes: int = 6,
 ) -> np.ndarray:
-    """Impulse response of a uniform exhaust duct (open at the far end).
+    """Impulse response of an open-open exhaust duct (modal expansion).
 
-    A unit volume-velocity impulse is injected at the valve end (x = 0) and
-    the pressure at the same end is recorded.  Resonances are set by the
-    geometry (length and speed of sound) rather than by hand-tuned frequencies.
-    The far end is a pressure release (open tailpipe); light damping stands in
-    for viscous and radiation losses.
+    The duct is treated as a uniform pipe open at both ends (cylinder volume
+    at the valve end, open tailpipe at the far end).  Its natural frequencies
+    are f_n = n * c / (2 L), so the resonances are set by the geometry
+    rather than by hand-tuned frequencies.  Each mode decays exponentially;
+    higher modes decay faster.  This is the linear-acoustic (small-signal)
+    solution of the 1-D wave equation for the duct.
     """
-    dt = 1.0 / sample_rate
-    dx = c_m_s * dt
-    n = max(2, int(round(length_m / dx)) + 1)
-    # Staggered (Yee) grid: pressure at nodes, velocity at half cells.
-    p = np.zeros(n, dtype=float)
-    u_half = np.zeros(n - 1, dtype=float)
     n_steps = max(1, int(round(duration_s * sample_rate)))
+    t = np.arange(n_steps) / sample_rate
+    f1 = c_m_s / (2.0 * length_m)
     h = np.zeros(n_steps, dtype=float)
-
-    for step in range(n_steps):
-        q_boundary = 1.0 if step == 0 else 0.0  # m^3/s, one sample
-        u_boundary = q_boundary / area_m2
-
-        # Update velocities with the current pressure gradient.
-        u_half -= (dt / (rho_kg_m3 * dx)) * np.diff(p)
-        # Update pressures with the new velocity field.
-        new_p = p.copy()
-        new_p[1:-1] = p[1:-1] - (
-            rho_kg_m3 * c_m_s**2 * dt / dx
-        ) * (u_half[1:] - u_half[:-1])
-        new_p[0] = p[0] - (
-            rho_kg_m3 * c_m_s**2 * dt / dx
-        ) * (u_half[0] - u_boundary)
-        new_p[-1] = 0.0  # open end
-        new_p *= 1.0 - damping
-        p = new_p
-        h[step] = p[0]
-
+    for n in range(1, n_modes + 1):
+        frequency = n * f1
+        decay = 0.05 / n  # higher modes decay faster
+        if decay <= 0.0:
+            decay = 0.001
+        h += (1.0 / n) * np.exp(-t / decay) * np.sin(
+            2.0 * np.pi * frequency * t
+        )
+    peak = float(np.max(np.abs(h)))
+    if peak > 0.0:
+        h /= peak
     return h
 
 
 def duct_transfer(
     values: np.ndarray,
     sample_rate: int,
-    length_m: float = 1.5,
+    length_m: float = 1.2,
     area_m2: float = 0.0028,
     c_m_s: float = 550.0,
     rho_kg_m3: float = 0.6,
+    damping: float = 0.0015,
 ) -> np.ndarray:
     """Filter a source signal through the assumed exhaust duct."""
     h = duct_impulse_response(
@@ -307,6 +297,7 @@ def duct_transfer(
         area_m2=area_m2,
         c_m_s=c_m_s,
         rho_kg_m3=rho_kg_m3,
+        damping=damping,
     )
     shaped = signal.fftconvolve(values, h, mode="same")
     sos = signal.butter(
@@ -357,6 +348,8 @@ def render(
     sample_rate: int,
     spark_advance_deg: float | None = None,
     d_phi: float = 0.5,
+    duct_length_m: float = 1.2,
+    duct_damping: float = 0.0015,
 ) -> tuple[np.ndarray, float]:
     """Render a steady-speed engine note."""
     model = CycleModel(cam_ramp_deg=0.0, cam_profile_exponent=2.0)
@@ -398,7 +391,9 @@ def render(
         exponent=1.0,
     )
 
-    exhaust = duct_transfer(exhaust, sample_rate, length_m=1.5)
+    exhaust = duct_transfer(
+        exhaust, sample_rate, length_m=duct_length_m, damping=duct_damping
+    )
     intake = intake_transfer(intake, sample_rate)
     exhaust = high_shelf(exhaust, sample_rate, gain_db=4.0, corner_hz=650.0)
     intake = high_shelf(intake, sample_rate, gain_db=2.0, corner_hz=1000.0)
