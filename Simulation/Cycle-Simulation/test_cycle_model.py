@@ -154,6 +154,8 @@ class CombustionTests(unittest.TestCase):
         for temperature in (300.0, 800.0, 1500.0, 2500.0):
             gas.TPY = temperature, ct.one_atm, self.model.y_fresh
             self.assertAlmostEqual(table.u(temperature), gas.int_energy_mass, delta=1.0)
+            self.assertAlmostEqual(table.cp_at(temperature), gas.cp_mass, delta=1.0)
+            self.assertAlmostEqual(table.cv_at(temperature), gas.cv_mass, delta=1.0)
             self.assertAlmostEqual(
                 table.cp_at(temperature) - table.cv_at(temperature),
                 gas.cp_mass - gas.cv_mass,

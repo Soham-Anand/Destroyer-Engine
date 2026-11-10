@@ -102,7 +102,7 @@ NASA-7 thermodynamic data extracted from the `nasa_gas.yaml` database bundled wi
 function. The mechanism is therefore a thermodynamic property library, not a chemistry model.
 
 The mechanism was checked against Cantera directly: tabulated internal energy agrees with
-`ct.Solution` within 1 J/kg, and `cp` and `cp − cv` agree within 1 J/kg·K over the fitted range.
+`ct.Solution` within 1 J/kg, and `cp` and `cv` agree within 1 J/kg·K over the fitted range.
 
 ---
 
