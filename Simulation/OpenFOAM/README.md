@@ -15,8 +15,10 @@ Inside the container the current directory is `/home/openfoam/cases`, which is
 this folder on the host.
 
 ```bash
-foamVersion
+foamEtcFile -show-api
 ```
+
+This prints `2412`.
 
 ## Case layout
 

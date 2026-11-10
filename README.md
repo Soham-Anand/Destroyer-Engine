@@ -265,7 +265,7 @@ Installation, licensing, conventions, and rejected alternatives are in [`Softwar
 
 ## Development Status
 
-Destroyer-Engine is in the conceptual development stage. The Destroyer-01(A) baseline geometry, performance targets, and constraint register are established as design targets; the analysis toolchain is defined in [`Software-Stack.md`](Software-Stack.md). Detailed CAD, 1-D simulation, structural FEA, and dyno validation are pending.
+Destroyer-Engine is in the conceptual development stage. The Destroyer-01(A) baseline geometry, performance targets, and constraint register are established as design targets; the analysis toolchain is installed and verified, and documented in [`Software-Stack.md`](Software-Stack.md). Detailed CAD, 1-D simulation, structural FEA, and dyno validation are pending.
 
 Estimated, calculated, simulated, and experimentally measured results are distinguished clearly. The current baseline is a set of targets, not a validated design.
 

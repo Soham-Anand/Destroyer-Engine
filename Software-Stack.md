@@ -1,6 +1,6 @@
 # Software Stack
 
-**Status:** decided 2026-11-09  
+**Status:** decided 2026-11-09; installed and verified 2026-11-10  
 **Applies to:** Destroyer-01(A) baseline and future Destroyer variants  
 **Constraints:** macOS on Apple Silicon, zero cost, commercial-use-compatible, cross-OS preferred
 
