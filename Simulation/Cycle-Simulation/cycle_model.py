@@ -266,7 +266,6 @@ class CycleModel:
         ignition_delay_deg: float = 5.0,
         cam_ramp_deg: float = 0.0,
         cam_profile_exponent: float = 2.0,
-        burned_equilibrium: bool = True,
         burned_freeze_temperature_k: float | None = 1200.0,
     ) -> None:
         with Path(spec_path).open("r", encoding="utf-8") as handle:
@@ -374,7 +373,7 @@ class CycleModel:
                 self.gas,
                 self.y_burned,
                 t_min=300.0,
-                equilibrium=burned_equilibrium,
+                equilibrium=True,
             )
 
     # -- composition helpers -------------------------------------------------

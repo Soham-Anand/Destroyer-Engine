@@ -170,8 +170,25 @@ def write_csv(rows: list[dict[str, float]], path: Path) -> None:
     print(f"\nWrote {path}")
 
 
-def nearest(rows: list[dict[str, float]], rpm: float) -> dict[str, float]:
-    return min(rows, key=lambda row: abs(row["rpm"] - rpm))
+def nearest(
+    rows: list[dict[str, float]], rpm: float
+) -> dict[str, float] | None:
+    candidate = min(rows, key=lambda row: abs(row["rpm"] - rpm))
+    if abs(candidate["rpm"] - rpm) > 0.5:
+        return None
+    return candidate
+
+
+def target_verdict(
+    value: float | None, target: float, fallback: float
+) -> str:
+    if value is None:
+        return "not swept"
+    if value >= target:
+        return "target"
+    if value >= fallback:
+        return "fallback"
+    return "short"
 
 
 def print_summary(rows: list[dict[str, float]]) -> None:
@@ -195,6 +212,12 @@ def print_summary(rows: list[dict[str, float]]) -> None:
     peak_power = max(rows, key=lambda row: row["power_kw"])
     at_torque_rpm = nearest(rows, TARGET_TORQUE_RPM)
     at_power_rpm = nearest(rows, TARGET_POWER_RPM)
+    torque_at_target = (
+        f"{at_torque_rpm['torque_nm']:.1f} N·m" if at_torque_rpm else "not swept"
+    )
+    power_at_target = (
+        f"{at_power_rpm['power_kw']:.1f} kW" if at_power_rpm else "not swept"
+    )
 
     print("\n## Target comparison\n")
     print("| Metric | Simulated | Target | Fallback | Verdict |")
@@ -203,25 +226,25 @@ def print_summary(rows: list[dict[str, float]]) -> None:
         f"| Peak torque | {peak_torque['torque_nm']:.1f} N·m @ "
         f"{peak_torque['rpm']:.0f} rpm | {TARGET_TORQUE_NM:.1f} N·m @ "
         f"{TARGET_TORQUE_RPM:.0f} rpm | {FALLBACK_TORQUE_NM:.1f} N·m | "
-        f"{'target' if peak_torque['torque_nm'] >= TARGET_TORQUE_NM else ('fallback' if peak_torque['torque_nm'] >= FALLBACK_TORQUE_NM else 'short')} |"
+        f"{target_verdict(peak_torque['torque_nm'], TARGET_TORQUE_NM, FALLBACK_TORQUE_NM)} |"
     )
     print(
         f"| Peak power | {peak_power['power_kw']:.1f} kW @ "
         f"{peak_power['rpm']:.0f} rpm | {TARGET_POWER_KW:.1f} kW @ "
         f"{TARGET_POWER_RPM:.0f} rpm | {FALLBACK_POWER_KW:.1f} kW | "
-        f"{'target' if peak_power['power_kw'] >= TARGET_POWER_KW else ('fallback' if peak_power['power_kw'] >= FALLBACK_POWER_KW else 'short')} |"
+        f"{target_verdict(peak_power['power_kw'], TARGET_POWER_KW, FALLBACK_POWER_KW)} |"
     )
     print(
         f"| Torque at {TARGET_TORQUE_RPM:.0f} rpm | "
-        f"{at_torque_rpm['torque_nm']:.1f} N·m | {TARGET_TORQUE_NM:.1f} N·m | "
+        f"{torque_at_target} | {TARGET_TORQUE_NM:.1f} N·m | "
         f"{FALLBACK_TORQUE_NM:.1f} N·m | "
-        f"{'target' if at_torque_rpm['torque_nm'] >= TARGET_TORQUE_NM else ('fallback' if at_torque_rpm['torque_nm'] >= FALLBACK_TORQUE_NM else 'short')} |"
+        f"{target_verdict(at_torque_rpm['torque_nm'] if at_torque_rpm else None, TARGET_TORQUE_NM, FALLBACK_TORQUE_NM)} |"
     )
     print(
         f"| Power at {TARGET_POWER_RPM:.0f} rpm | "
-        f"{at_power_rpm['power_kw']:.1f} kW | {TARGET_POWER_KW:.1f} kW | "
+        f"{power_at_target} | {TARGET_POWER_KW:.1f} kW | "
         f"{FALLBACK_POWER_KW:.1f} kW | "
-        f"{'target' if at_power_rpm['power_kw'] >= TARGET_POWER_KW else ('fallback' if at_power_rpm['power_kw'] >= FALLBACK_POWER_KW else 'short')} |"
+        f"{target_verdict(at_power_rpm['power_kw'] if at_power_rpm else None, TARGET_POWER_KW, FALLBACK_POWER_KW)} |"
     )
     print(
         f"| Best BSFC | {min(row['bsfc_g_per_kwh'] for row in rows):.0f} g/kWh | "
@@ -249,7 +272,6 @@ def main(argv: list[str] | None = None) -> int:
         charge_cooling_effectiveness=args.charge_cooling,
         cam_ramp_deg=0.0,
         cam_profile_exponent=2.0,
-        burned_equilibrium=freeze_k is None,
         burned_freeze_temperature_k=freeze_k,
     )
     rpms = rpm_points(args)
