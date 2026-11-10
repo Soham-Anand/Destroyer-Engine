@@ -55,10 +55,11 @@ is scratch output. The script and this report are version-controlled.
 3. **Cylinder summation.** Four copies of the single-cylinder flow are summed at 0°, 180°, 360°,
    and 540° in the **1-3-4-2** firing order. Small per-cylinder gain and delay offsets
    (≤ 4 % and ≤ 0.18 ms) break the perfect symmetry.
-4. **Exhaust path.** The summed flow is high-passed to remove the mean component, convolved with
-   an assumed decaying-resonance impulse response (180, 360, 720, 1440, and 2880 Hz), band-limited
-   to 35 Hz–6 kHz, and coloured by a short feedback comb that represents a collector/tailpipe
-   reflection.
+4. **Exhaust path (1-D acoustic duct).** The summed flow is high-passed and filtered through a
+   uniform-duct impulse response: a 1.5 m open-ended pipe with 550 m/s sound speed and light
+   damping. Resonances are therefore set by the pipe length (fundamental ~180 Hz) rather than by
+   hand-tuned frequencies. A short feedback comb still represents a downstream reflection
+   (muffler or tailpipe tip).
 5. **Intake path.** A separate, weaker path uses 400–3200 Hz resonances and an 80 Hz–7 kHz band.
 6. **Turbulence layer.** A reproducible broadband noise layer is gated by each cylinder's flow
    pulse and band-limited to 140 Hz–7.5 kHz. This stands in for turbulent jet noise, which a
@@ -80,7 +81,7 @@ to produce a recognisable four-cylinder character, not fitted to a recording.
 | Source | Valve mass flow from the single-zone cycle model | No port pressure or wave dynamics; the model's smooth lift profile underestimates the sharp blowdown edge |
 | Firing order | 1-3-4-2, 180° spacing | Matches the inline-four crank layout |
 | Cylinder scatter | Gains 0.93–1.04, delays −0.08 to +0.18 ms | Voicing choice, not measured |
-| Exhaust resonances | 180/360/720/1440/2880 Hz, decays 5–25 ms | Assumed; no runner or collector geometry exists yet |
+| Exhaust duct | 1.5 m open-ended pipe, 550 m/s sound speed, 0.15 % damping per step | Assumed geometry; no runner or collector dimensions exist yet |
 | Comb reflection | 2.2 ms delay, −0.28 feedback | Stand-in for a collector/tailpipe reflection |
 | Intake | 30 % of exhaust level, 400–3200 Hz resonances | Assumed; no plenum or runner geometry |
 | Turbulence | Band-limited noise at 35 % of the shaped exhaust RMS | Qualitative stand-in; level is not predicted |

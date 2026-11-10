@@ -244,6 +244,87 @@ def intake_transfer(values: np.ndarray, sample_rate: int) -> np.ndarray:
     return signal.sosfilt(sos, shaped)
 
 
+def duct_impulse_response(
+    sample_rate: int,
+    length_m: float = 1.5,
+    area_m2: float = 0.0028,
+    c_m_s: float = 550.0,
+    rho_kg_m3: float = 0.6,
+    damping: float = 0.0015,
+    duration_s: float = 0.12,
+) -> np.ndarray:
+    """Impulse response of a uniform exhaust duct (open at the far end).
+
+    A unit volume-velocity impulse is injected at the valve end (x = 0) and
+    the pressure at the same end is recorded.  Resonances are set by the
+    geometry (length and speed of sound) rather than by hand-tuned frequencies.
+    The far end is a pressure release (open tailpipe); light damping stands in
+    for viscous and radiation losses.
+    """
+    dt = 1.0 / sample_rate
+    dx = c_m_s * dt
+    n = max(2, int(round(length_m / dx)) + 1)
+    # Staggered (Yee) grid: pressure at nodes, velocity at half cells.
+    p = np.zeros(n, dtype=float)
+    u_half = np.zeros(n - 1, dtype=float)
+    n_steps = max(1, int(round(duration_s * sample_rate)))
+    h = np.zeros(n_steps, dtype=float)
+
+    for step in range(n_steps):
+        q_boundary = 1.0 if step == 0 else 0.0  # m^3/s, one sample
+        u_boundary = q_boundary / area_m2
+
+        # Update velocities with the current pressure gradient.
+        u_half -= (dt / (rho_kg_m3 * dx)) * np.diff(p)
+        # Update pressures with the new velocity field.
+        new_p = p.copy()
+        new_p[1:-1] = p[1:-1] - (
+            rho_kg_m3 * c_m_s**2 * dt / dx
+        ) * (u_half[1:] - u_half[:-1])
+        new_p[0] = p[0] - (
+            rho_kg_m3 * c_m_s**2 * dt / dx
+        ) * (u_half[0] - u_boundary)
+        new_p[-1] = 0.0  # open end
+        new_p *= 1.0 - damping
+        p = new_p
+        h[step] = p[0]
+
+    return h
+
+
+def duct_transfer(
+    values: np.ndarray,
+    sample_rate: int,
+    length_m: float = 1.5,
+    area_m2: float = 0.0028,
+    c_m_s: float = 550.0,
+    rho_kg_m3: float = 0.6,
+) -> np.ndarray:
+    """Filter a source signal through the assumed exhaust duct."""
+    h = duct_impulse_response(
+        sample_rate,
+        length_m=length_m,
+        area_m2=area_m2,
+        c_m_s=c_m_s,
+        rho_kg_m3=rho_kg_m3,
+    )
+    shaped = signal.fftconvolve(values, h, mode="same")
+    sos = signal.butter(
+        2, [80.0, 6000.0], btype="bandpass", fs=sample_rate, output="sos"
+    )
+    shaped = signal.sosfilt(sos, shaped)
+    # A short feedback comb represents a downstream reflection (muffler or
+    # tailpipe tip) that the single open-ended duct does not capture.
+    delay = max(1, int(round(0.0022 * sample_rate)))
+    b = np.zeros(delay + 1)
+    a = np.zeros(delay + 1)
+    b[0] = 1.0
+    a[0] = 1.0
+    a[delay] = -0.22
+    shaped = signal.lfilter(b, a, shaped)
+    return shaped
+
+
 def direct_noise_path(values: np.ndarray, sample_rate: int) -> np.ndarray:
     """Band-limit turbulence noise without the narrow duct resonances.
 
@@ -285,7 +366,7 @@ def render(
     # The acoustic source is the unsteady valve flow.  A high-pass removes the
     # mean flow and emphasises the blowdown and closing edges.
     exhaust_cycle = sum_cylinders(
-        highpass(mdot_out, 25.0, sample_rate), n_cycle, sample_rate
+        highpass(mdot_out, 40.0, sample_rate), n_cycle, sample_rate
     )
     intake_cycle = sum_cylinders(
         highpass(mdot_in, 60.0, sample_rate), n_cycle, sample_rate
@@ -317,7 +398,7 @@ def render(
         exponent=1.0,
     )
 
-    exhaust = exhaust_transfer(exhaust, sample_rate)
+    exhaust = duct_transfer(exhaust, sample_rate, length_m=1.5)
     intake = intake_transfer(intake, sample_rate)
     exhaust = high_shelf(exhaust, sample_rate, gain_db=4.0, corner_hz=650.0)
     intake = high_shelf(intake, sample_rate, gain_db=2.0, corner_hz=1000.0)

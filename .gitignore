@@ -18,6 +18,7 @@ venv/
 # Simulation scratch output (keep inputs and reports under version control)
 Simulation/**/output/
 Simulation/**/results/
+Simulation/**/cache/
 Simulation/OpenFOAM/**/processor*/
 Simulation/OpenFOAM/**/postProcessing/
 Simulation/OpenFOAM/**/VTK/

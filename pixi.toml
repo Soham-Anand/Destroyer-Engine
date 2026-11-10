@@ -14,6 +14,7 @@ matplotlib = "*"
 jupyterlab = "*"
 cantera = "3.2.*"
 calculix = "2.23.*"
+pygame = "*"
 
 [tasks]
 test = { depends-on = ["test-calculations", "test-cycle", "test-sound"] }
@@ -25,4 +26,6 @@ sweep = "python Simulation/Cycle-Simulation/run_sweep.py"
 sweep-tuned = "python Simulation/Cycle-Simulation/run_sweep.py --intake-pressure-kpa 106.325 --output Simulation/Cycle-Simulation/sweep-tuned-intake.csv"
 sweep-cooling = "python Simulation/Cycle-Simulation/run_sweep.py --charge-cooling 0.50 --output Simulation/Cycle-Simulation/sweep-charge-cooling.csv"
 sound = "python Simulation/Acoustics/engine_sound.py --rpm 4800 --duration 4.0 --plot"
+car-sim = "python Simulation/Car-Simulator/car_sim.py"
+car-sim-loops = "python Simulation/Car-Simulator/generate_loops.py"
 lab = "jupyter lab"

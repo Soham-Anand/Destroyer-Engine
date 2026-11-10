@@ -8,6 +8,7 @@ Numerical studies that support design decisions.
 |---|---|---|---|---|
 | Cycle simulation | Python + Cantera | First-pass torque curve, volumetric efficiency, target check | C-006, C-007, C-012, C-013 | Complete — see [`Cycle-Simulation/`](Cycle-Simulation/README.md) |
 | Engine sound | Python + SciPy | Qualitative exhaust note from the cycle trace | — | First pass — see [`Acoustics/`](Acoustics/README.md) |
+| Car sound simulator | Python + Pygame | Interactive transmission/vehicle sandbox with live engine note | — | Prototype — see [`Car-Simulator/`](Car-Simulator/README.md) |
 | 1-D gas dynamics | OpenWAM | Wave-action cross-check and intake/exhaust tuning | C-006, C-007, C-024, C-025 | Planned |
 | Structural FEA | FreeCAD FEM + CalculiX | Rod, piston, crank, and block stresses at peak load | C-017–C-021 | Planned |
 | Thermal / CFD | OpenFOAM + ParaView | Coolant jacket, oil circuit, radiator, and airflow | C-026–C-034 | Planned |
@@ -43,3 +44,7 @@ component lands on the 2nd engine order (160.0 Hz at 4800 rpm, 233.3 Hz at 7000 
 expected firing frequency. The sound is not a validated acoustic prediction: exhaust and intake
 geometry, muffler transmission loss, radiation, and microphone calibration are still missing. See
 [`Acoustics/README.md`](Acoustics/README.md).
+
+A Pygame-based car sound simulator wraps the same loops in a 1-D vehicle and transmission model
+so the note can be auditioned while shifting gears. It is an interactive prototype, not a validated
+driving simulator. See [`Car-Simulator/README.md`](Car-Simulator/README.md).
