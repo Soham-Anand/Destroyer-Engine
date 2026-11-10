@@ -208,7 +208,7 @@ All parts are modeled parametrically so dimensions can be driven by the engineer
 
 ## Engineering Constraints (Destroyer-01 baseline)
 
-Values below are **design targets** for Destroyer-01(A). They are not yet validated by simulation or testing. The full constraint register is in [`Engineering-Constraints/constraints.md`](Engineering-Constraints/constraints.md); the numeric baseline is in [`Specifications/destroyer-01.json`](Specifications/destroyer-01.json).
+Values below are **design targets** for Destroyer-01(A). A first-pass cycle simulation supports the recorded fallback performance (205 N·m at 4800 rpm and 140 kW at 7000 rpm) but not the 215 N·m / 150 kW stretch targets at those speeds; see [`Simulation/Cycle-Simulation/`](Simulation/Cycle-Simulation/README.md). They are not yet validated by testing. The full constraint register is in [`Engineering-Constraints/constraints.md`](Engineering-Constraints/constraints.md); the numeric baseline is in [`Specifications/destroyer-01.json`](Specifications/destroyer-01.json).
 
 | Parameter | Target | Status |
 |---|---|---|
@@ -243,9 +243,10 @@ See [`Materials/README.md`](Materials/README.md) for selection criteria and stat
 
 - Hand calculations and the Python toolkit live under `Calculations/`.
 - FEA / thermal / CFD studies live under `Simulation/`.
+- The first cycle study — a crank-angle filling-and-emptying model of Destroyer-01(A) — is in [`Simulation/Cycle-Simulation/`](Simulation/Cycle-Simulation/README.md).
 - The controlled CAD/CAE toolchain is documented in [`Software-Stack.md`](Software-Stack.md).
 - Every result must be tagged as **estimated / calculated / simulated / measured** and reference its assumptions.
-- Run `python3 Calculations/analyse_spec.py` to check the baseline for internal consistency, and `python3 Calculations/test_calculations.py` to run the unit tests.
+- Run `pixi run test` for all unit tests, `pixi run spec` to check the baseline for internal consistency, and `pixi run sweep` to regenerate the cycle-simulation results.
 
 ---
 
@@ -265,7 +266,9 @@ Installation, licensing, conventions, and rejected alternatives are in [`Softwar
 
 ## Development Status
 
-Destroyer-Engine is in the conceptual development stage. The Destroyer-01(A) baseline geometry, performance targets, and constraint register are established as design targets; the analysis toolchain is installed and verified, and documented in [`Software-Stack.md`](Software-Stack.md). Detailed CAD, 1-D simulation, structural FEA, and dyno validation are pending.
+Destroyer-Engine is in the conceptual development stage. The Destroyer-01(A) baseline geometry, performance targets, and constraint register are established as design targets; the analysis toolchain is installed and verified, and documented in [`Software-Stack.md`](Software-Stack.md).
+
+The first analysis pass is complete: a crank-angle filling-and-emptying cycle model predicts 211.1 N·m at 4800 rpm and 144.0 kW at 7000 rpm `[simulated]`, meeting the recorded fallback targets but not the 215 N·m / 150 kW stretch targets at those speeds. See [`Simulation/Cycle-Simulation/`](Simulation/Cycle-Simulation/README.md) for the assumptions, sensitivity band, and limitations. Wave-action 1-D simulation, detailed CAD, structural FEA, and dyno validation are pending.
 
 Estimated, calculated, simulated, and experimentally measured results are distinguished clearly. The current baseline is a set of targets, not a validated design.
 
